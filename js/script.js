@@ -151,13 +151,13 @@
         })
     }
 
-    // 滾動懸停
-    (function(){
-      var nav = document.querySelector('#navbar .nav')
-      var user_info = document.querySelector('#user_info')
-      // setScrollElementClass(nav, 'fixed-navbar')
-      // setScrollElementClass(user_info, 'fixed-userinfo-container')
-    }());
+    // // 滾動懸停
+    // (function(){
+    //   var nav = document.querySelector('#navbar .nav')
+    //   var user_info = document.querySelector('#user_info')
+    //   // setScrollElementClass(nav, 'fixed-navbar')
+    //   // setScrollElementClass(user_info, 'fixed-userinfo-container')
+    // }());
 
     // 主页导航模糊效果
     (function() {
@@ -177,11 +177,11 @@
             navbar.appendChild(blurCopyContent)
 
         // 顶部间距
-        var spaceNumber = 30;
-        document.body.onscroll = function () {
-            transtion = 'translate3d(0,' + (-(document.body.scrollTop - spaceNumber) + 'px') + ',0)'
-            copyContent.style.transform = transtion
-        }
+        // var spaceNumber = 30;
+        // document.body.onscroll = function () {
+        //     transtion = 'translate3d(0,' + (-(document.body.scrollTop - spaceNumber) + 'px') + ',0)'
+        //     copyContent.style.transform = transtion
+        // }
 
     }());
 
@@ -234,9 +234,12 @@
     (function () {
         var dropDownBtn = document.querySelector('#navMenuDropdown');
         var navbar = document.querySelector('#navbar');
-
+        var main  = document.querySelector('#main-wrap')
+        var body = document.body;
         dropDownBtn.onclick = function () {
             navbar.classList.toggle('overflow-hidden')
+            body.classList.toggle('overflow-y-hidden')
+            main.classList.toggle('is-hidden')
         }
     }())
 })(jQuery);

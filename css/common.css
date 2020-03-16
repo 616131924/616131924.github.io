@@ -61,6 +61,10 @@
 .overflow-hidden {
     overflow: hidden;
 }
+.overflow-y-hidden{
+    overflow-y: hidden;
+    height: 100%;
+}
 
 /*layout end*/
 
