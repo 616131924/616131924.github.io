@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190311193033876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190311193745414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2020-03-13T19:47:49.000Z">
-<meta property="article:modified_time" content="2020-03-16T13:14:53.271Z">
+<meta property="article:modified_time" content="2020-03-17T09:28:14.033Z">
 <meta property="article:author" content="Hmk">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190311194017886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
@@ -40,8 +40,6 @@
   
     <link rel="icon" href="/favicon.png">
   
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   
 <link rel="stylesheet" href="/css/common.css">
@@ -108,7 +106,7 @@
 <style>
     .header-box {
         height: 370px;
-        filter: blur(10px);
+        /* filter: blur(10px); */
         background-size: cover;
         background-color: lightsteelblue;
     }
@@ -170,18 +168,52 @@
 <p>在JavaScript中，函数是一个很特别的存在，函数也是对象它具有自己的原型（即<strong>proto</strong>），但函数也能作为某个对象的构造函数而存在。作为构造函数，该函数的作用就是按照指定的原型对象创建一个具体的对象，而指定的原型对象则会保存在函数的prototype属性中，而被创建出来的具体对象中的<strong>proto</strong>会指向该函数的prototype。</p>
 <h6 id="3-contructor"><a href="#3-contructor" class="headerlink" title="3.contructor"></a>3.contructor</h6><p><img src="https://img-blog.csdnimg.cn/20190311193745414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70" alt="!image"><br>由图中可以看出constructor属性指向当前对象的构造函数，实例对象中是不存在constructor属性的（手动添加constructor属性除外），但能通过原型链的访问到原型对象上的constructor属性，也就是说constructor属性是存在于prototype中的。</p>
 <h3 id="原型与原型链的应用"><a href="#原型与原型链的应用" class="headerlink" title="原型与原型链的应用"></a>原型与原型链的应用</h3><h5 id="浅析Vue源码内原型与原型链的使用"><a href="#浅析Vue源码内原型与原型链的使用" class="headerlink" title="浅析Vue源码内原型与原型链的使用"></a>浅析Vue源码内原型与原型链的使用</h5><h6 id="1-从Vue-extend了解Vue实例与VueComponent实例间的继承"><a href="#1-从Vue-extend了解Vue实例与VueComponent实例间的继承" class="headerlink" title="1.从Vue.extend了解Vue实例与VueComponent实例间的继承"></a>1.从Vue.extend了解Vue实例与VueComponent实例间的继承</h6><p>首先，我们经常在代码中操作组件中的this，我们先将this输出来看看。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">VueComponet&#123;</span><br><span class="line">    $attrs: (...)</span><br><span class="line">    ...</span><br><span class="line">    __proto__: Vue</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript">VueComponet{
+    $attrs: (...)
+    ...
+    __proto__: Vue
+}
+</code></pre>
 <p>如上代码所示，其实每一个组件都是由一个Vue原型对象创建而来，在Vue的说明文档中，Vue.extend的解析为‘使用基础 Vue 构造器，创建一个“子类”’，转成代码的意思是Vue.extend生成一个组件构造函数，如下代码所示。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> Vue.extend = <span class="function"><span class="keyword">function</span> (<span class="params">extendOptions: Object</span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line"><span class="number">1</span>    <span class="keyword">const</span> Super = <span class="keyword">this</span></span><br><span class="line">    ...</span><br><span class="line"><span class="number">2</span>    <span class="keyword">const</span> Sub = <span class="function"><span class="keyword">function</span> <span class="title">VueComponent</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>._init(options)</span><br><span class="line">    &#125;</span><br><span class="line"><span class="number">3</span>   Sub.prototype = <span class="built_in">Object</span>.create(Super.prototype)</span><br><span class="line">    ...</span><br><span class="line"><span class="number">4</span>   <span class="keyword">return</span> Sub</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript"> Vue.extend = function (extendOptions: Object): Function {
+    ...
+1    const Super = this
+    ...
+2    const Sub = function VueComponent (options) {
+      this._init(options)
+    }
+3   Sub.prototype = Object.create(Super.prototype)
+    ...
+4   return Sub
+  }
+}</code></pre>
 <p>实现Vue与VueComponet之间的继承分为以下三步：</p>
 <p>1.利用Super变量保存当前的调用extend方法的Vue实例对象</p>
 <p>2.进行VueComponet构造函数的编写</p>
 <p>3.指定构造函数中的prototype属性，即告诉构造函数需要根据指定的prototype进行对象的创建，而prototype指向的是利用Object.create(Vue当前实例对象)创建出来的对象，此时就VueComponent实例对象就能够访问到Vue实例对象上的属性，也就形成了所说的原型链，其中继承已经在这一步完成了。</p>
 <p>4.最后一步则将VueComponet的构造函数返回，也就完成了Vue文档中‘创建一个“子类”’的说法</p>
-<h6 id="2-this-emit方法挂载"><a href="#2-this-emit方法挂载" class="headerlink" title="2.this.$emit方法挂载"></a>2.this.$emit方法挂载</h6><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Vue.prototype.$emit = <span class="function"><span class="keyword">function</span> (<span class="params">event: string</span>): <span class="title">Component</span> </span>&#123;</span><br><span class="line">   <span class="keyword">const</span> vm: Component = <span class="keyword">this</span></span><br><span class="line">  ...</span><br><span class="line">   <span class="keyword">return</span> vm</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h6 id="2-this-emit方法挂载"><a href="#2-this-emit方法挂载" class="headerlink" title="2.this.$emit方法挂载"></a>2.this.$emit方法挂载</h6><pre><code class="javascript"> Vue.prototype.$emit = function (event: string): Component {
+    const vm: Component = this
+   ...
+    return vm
+  }</code></pre>
 <p>this.$emit()方法其实并不是VueComponet实例对象上的方法，而是VueComponet继承了Vue对象，继而形成了原型链，当访问到VueComponet.$emit()时会访问Vue.$emit(),而源码中$emit()是通过以上方法挂载到Vue对象上的。</p>
 <h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><h6 id="编写一个实现继承的函数"><a href="#编写一个实现继承的函数" class="headerlink" title="编写一个实现继承的函数"></a>编写一个实现继承的函数</h6><p>该函数传入一个构造函数a与一个构造函数b和b类中需要的属性，返回一个b类继承a类后新的的构造函数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> inherit =<span class="function">(<span class="params">fatherConstructor,sonConstructor,properties</span>) =&gt;</span>&#123;</span><br><span class="line">  <span class="number">1</span>  <span class="keyword">let</span> subConstructor = <span class="function"><span class="keyword">function</span>(<span class="params">...properties</span>)</span>&#123;</span><br><span class="line">        fatherConstructor.call(<span class="keyword">this</span>,...properties)</span><br><span class="line">        sonConstructor.call(<span class="keyword">this</span>,...properties)</span><br><span class="line">       &#125;</span><br><span class="line">  <span class="number">2</span>  subConstructor.prototype =&#123;</span><br><span class="line">        ...properties,</span><br><span class="line">        <span class="keyword">constructor</span>:subConstructor</span><br><span class="line">       &#125;</span><br><span class="line">  3  Object.setPrototypeOf(</span><br><span class="line">       subConstructor.prototype,</span><br><span class="line">       fatherConstructor.prototype</span><br><span class="line">    )</span><br><span class="line">    return subConstructor</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="javascript"> const inherit =(fatherConstructor,sonConstructor,properties) =&gt;{
+   1  let subConstructor = function(...properties){
+         fatherConstructor.call(this,...properties)
+         sonConstructor.call(this,...properties)
+        }
+   2  subConstructor.prototype ={
+         ...properties,
+         constructor:subConstructor
+        }
+   3  Object.setPrototypeOf(
+        subConstructor.prototype,
+        fatherConstructor.prototype
+     )
+     return subConstructor
+ }</code></pre>
 <p>步骤分析：</p>
 <p>1.创建一个新的构造函数（称为c构造函数），该函数内部调用了父类与子类的构造函数，确保构造函数中初始化的时候与父类和子类一致。</p>
 <p>2.新建一个新构造函数的原型对象，里面要保有所有b类的属性和指向c构造函数的constructor属性</p>

@@ -228,18 +228,20 @@
 
         close_search_btn.addEventListener('click', toggleSearchView)
     }());
+    // 显示隐藏导航菜单
+    function toggleHideDrop (){
+      var navbar = document.querySelector('#navbar');
+      var main  = document.querySelector('#main-wrap')
+      var body = document.body;
+      navbar.classList.toggle('overflow-hidden')
+      body.classList.toggle('overflow-y-hidden')
+      main.classList.toggle('is-hidden')
+    }
 
-
-    // 导航菜单
     (function () {
         var dropDownBtn = document.querySelector('#navMenuDropdown');
-        var navbar = document.querySelector('#navbar');
-        var main  = document.querySelector('#main-wrap')
-        var body = document.body;
         dropDownBtn.onclick = function () {
-            navbar.classList.toggle('overflow-hidden')
-            body.classList.toggle('overflow-y-hidden')
-            main.classList.toggle('is-hidden')
+          toggleHideDrop()
         }
     }())
 })(jQuery);
