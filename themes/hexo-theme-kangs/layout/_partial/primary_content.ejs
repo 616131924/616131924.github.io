@@ -27,10 +27,10 @@
                         <%}%>
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            <%- truncate(strip_html(firstArticle.content), {length: 120, omission: '..'}) %>
+                            <%- truncate(strip_html(firstArticle.discription || ''), {length: 120, omission: '..'}) %>
                         </p>
                         <p class="date text-shadow"><%- firstArticle.date.format(config.date_format) %></p>
-                        <button class="button is-info is-small">Read More</button>
+                        <!-- <button class="button is-info is-small">Read More</button> -->
                     </div>
             </div>
         </a>

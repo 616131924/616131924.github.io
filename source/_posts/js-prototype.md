@@ -3,6 +3,7 @@ title: Javascript中的原型与原型链
 date: 2020-03-13 19:47:49
 header_img : https://img-blog.csdnimg.cn/20190311194017886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70
 categories : JavaScript基础
+discription : 'Javascript基础之原型与原型链'
 ---
 # 浅谈JavaScript中的原型与原型链
 
