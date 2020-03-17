@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>JavaScript消息驱动</title>
+      <link href="/2020/03/17/JavaScript%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8/"/>
+      <url>/2020/03/17/JavaScript%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="JavaScript消息驱动源码"><a href="#JavaScript消息驱动源码" class="headerlink" title="JavaScript消息驱动源码"></a>JavaScript消息驱动源码</h1><pre><code class="javascript">export default class EventWait {  constructor () {    // 消息驱动触发的事件对象    this.eventHandler = {}    // 等待的消息队列    this.waitingList = []    this._this = this  }  waitFor (waitList, handler, thisObj, ...parmas) {    if (typeof resources === &#39;string&#39;) waitList = [waitList]    if (waitList.length === 0) {      this.runHandler(handler, parmas)      return    }    if (thisObj) this._this = thisObj    this.eventHandler = {      &#39;waiting&#39;: waitList.slice(0),      &#39;handler&#39;: handler,      &#39;parmas&#39;: parmas    }    this.waitingList = waitList  }  // 消息驱动完成后的事件调用  runHandler (handler, parmas) {    if (typeof handler === &#39;function&#39;) {      // 将事件放入下一个事件队列中执行，否则会影响当前的事件执行顺序      setTimeout(() =&gt; {        handler.apply(this._this, parmas)      }, 0)    }  }  // 外部调用的触发消息驱动方法（通知）  trigger (waitItem) {    if (typeof waitItem === &#39;string&#39;) waitItem = [waitItem]    for (let i = 0; i &lt; waitItem.length; i++) {      let wait = waitItem[i]      if (!this.waitingList.includes(wait)) return      this.release(wait)    }  }  // 释放消息驱动队列  release (waitItem) {    if (typeof waitItem === &#39;string&#39;) waitItem = [waitItem]    for (let i = 0; i &lt; waitItem.length; i++) {      if (this.eventHandler.waiting.includes(waitItem[i])) {        let pos = this.eventHandler.waiting.indexOf(waitItem[i])        this.eventHandler.waiting.splice(pos, 1)        if (this.eventHandler.waiting.length === 0) {          this.runHandler(this.eventHandler.handler, this.eventHandler.parmas)        }      }    }  }}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> JavaScript基础 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Javascript中的原型与原型链</title>
       <link href="/2020/03/13/js-prototype/"/>
       <url>/2020/03/13/js-prototype/</url>
