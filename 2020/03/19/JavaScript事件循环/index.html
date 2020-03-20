@@ -15,19 +15,21 @@
   </script>
 
   
-  <title>JavaScript消息驱动 | Kang&#39;s Blog</title>
+  <title>JavaScript事件循环 | Kang&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="JavaScript消息驱动源码export default class EventWait {   constructor () {     &#x2F;&#x2F; 消息驱动触发的事件对象     this.eventHandler &#x3D; {}     &#x2F;&#x2F; 等待的消息队列     this.waitingList &#x3D; []     this._this &#x3D; this   }   waitFor (waitList">
+  <meta name="description" content="JavaSript中的事件循环机制JavaScript中的代码运行都是单线程的，需要保持线程中的事件执行就需要有一个事件循环的机制，本文将讲述JavaScript维持事件执行的事件循环机制。由于Node环境与浏览器环境的事件循环有差距，所以本文会分开来讲述。 事件循环概念JavaScript中的事件循环由两个任务队列来组成，分别是宏任务队列(macro-task)与微任务队列(micro-task">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript消息驱动">
-<meta property="og:url" content="https://616131924.github.io/2020/03/17/JavaScript%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8/index.html">
+<meta property="og:title" content="JavaScript事件循环">
+<meta property="og:url" content="https://616131924.github.io/2020/03/19/JavaScript%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/index.html">
 <meta property="og:site_name" content="Kang&#39;s Blog">
-<meta property="og:description" content="JavaScript消息驱动源码export default class EventWait {   constructor () {     &#x2F;&#x2F; 消息驱动触发的事件对象     this.eventHandler &#x3D; {}     &#x2F;&#x2F; 等待的消息队列     this.waitingList &#x3D; []     this._this &#x3D; this   }   waitFor (waitList">
+<meta property="og:description" content="JavaSript中的事件循环机制JavaScript中的代码运行都是单线程的，需要保持线程中的事件执行就需要有一个事件循环的机制，本文将讲述JavaScript维持事件执行的事件循环机制。由于Node环境与浏览器环境的事件循环有差距，所以本文会分开来讲述。 事件循环概念JavaScript中的事件循环由两个任务队列来组成，分别是宏任务队列(macro-task)与微任务队列(micro-task">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-03-17T17:55:55.000Z">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/9/16/165e1427075ec517?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
+<meta property="article:published_time" content="2020-03-19T12:24:34.000Z">
 <meta property="article:modified_time" content="2020-03-20T13:15:27.259Z">
 <meta property="article:author" content="Hmk">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/9/16/165e1427075ec517?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
   
     <link rel="alternate" href="/atom.xml" title="Kang&#39;s Blog" type="application/atom+xml">
   
@@ -136,13 +138,13 @@
     <div class="container post-box">
         <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
             <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>JavaScript消息驱动</strong>
+                <strong>JavaScript事件循环</strong>
             </h1>
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1965250681,3772762698&fm=26&gp=0.jpg">
                 <span style="padding:0 10px;"> <span class="sub-title">By</span> Humingkang</span>
-                <span class="post-date sub-title">-- 2020-03-17</span>
+                <span class="post-date sub-title">-- 2020-03-19</span>
             </div>
             
                 <div>
@@ -151,62 +153,200 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <h1 id="JavaScript消息驱动源码"><a href="#JavaScript消息驱动源码" class="headerlink" title="JavaScript消息驱动源码"></a>JavaScript消息驱动源码</h1><pre><code class="javascript">export default class EventWait {
-  constructor () {
-    // 消息驱动触发的事件对象
-    this.eventHandler = {}
-    // 等待的消息队列
-    this.waitingList = []
-    this._this = this
-  }
-  waitFor (waitList, handler, thisObj, ...parmas) {
-    if (typeof resources === &#39;string&#39;) waitList = [waitList]
-    if (waitList.length === 0) {
-      this.runHandler(handler, parmas)
-      return
-    }
-    if (thisObj) this._this = thisObj
-    this.eventHandler = {
-      &#39;waiting&#39;: waitList.slice(0),
-      &#39;handler&#39;: handler,
-      &#39;parmas&#39;: parmas
-    }
-    this.waitingList = waitList
-  }
-  // 消息驱动完成后的事件调用
-  runHandler (handler, parmas) {
-    if (typeof handler === &#39;function&#39;) {
-      // 将事件放入下一个事件队列中执行，否则会影响当前的事件执行顺序
-      setTimeout(() =&gt; {
-        handler.apply(this._this, parmas)
-      }, 0)
-    }
-  }
-  // 外部调用的触发消息驱动方法（通知）
-  trigger (waitItem) {
-    if (typeof waitItem === &#39;string&#39;) waitItem = [waitItem]
-    for (let i = 0; i &lt; waitItem.length; i++) {
-      let wait = waitItem[i]
-      if (!this.waitingList.includes(wait)) return
-      this.release(wait)
-    }
-  }
-  // 释放消息驱动队列
-  release (waitItem) {
-    if (typeof waitItem === &#39;string&#39;) waitItem = [waitItem]
-    for (let i = 0; i &lt; waitItem.length; i++) {
-      if (this.eventHandler.waiting.includes(waitItem[i])) {
-        let pos = this.eventHandler.waiting.indexOf(waitItem[i])
-        this.eventHandler.waiting.splice(pos, 1)
-        if (this.eventHandler.waiting.length === 0) {
-          this.runHandler(this.eventHandler.handler, this.eventHandler.parmas)
-        }
-      }
-    }
-  }
-}
+            <h1 id="JavaSript中的事件循环机制"><a href="#JavaSript中的事件循环机制" class="headerlink" title="JavaSript中的事件循环机制"></a>JavaSript中的事件循环机制</h1><p>JavaScript中的代码运行都是单线程的，需要保持线程中的事件执行就需要有一个事件循环的机制，本文将讲述JavaScript维持事件执行的事件循环机制。由于Node环境与浏览器环境的事件循环有差距，所以本文会分开来讲述。</p>
+<h3 id="事件循环概念"><a href="#事件循环概念" class="headerlink" title="事件循环概念"></a>事件循环概念</h3><p>JavaScript中的事件循环由两个任务队列来组成，分别是宏任务队列(macro-task)与微任务队列(micro-task)，两个任务队列间的执行顺序如下图所示。<br><img src="https://user-gold-cdn.xitu.io/2018/9/16/165e1427075ec517?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="image"><br>具体描述：先执行宏任务，然后执行宏任务中产生的微任务，如果微任务中产生宏任务，则将宏任务放入下一轮循环的宏任务队列中，如果微任务中产生微任务，则继续执行新产生的微任务直到所有微任务结束，然后在执行下一轮的宏任务。</p>
+<h2 id="浏览器中的事件循环"><a href="#浏览器中的事件循环" class="headerlink" title="浏览器中的事件循环"></a>浏览器中的事件循环</h2><h5 id="浏览器中的宏任务包括："><a href="#浏览器中的宏任务包括：" class="headerlink" title="浏览器中的宏任务包括："></a>浏览器中的宏任务包括：</h5><ul>
+<li>script(整体代码)</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>setImmediate</li>
+<li>I/O</li>
+<li>UI render<h5 id="浏览器中的微任务包括："><a href="#浏览器中的微任务包括：" class="headerlink" title="浏览器中的微任务包括："></a>浏览器中的微任务包括：</h5></li>
+<li>process.nextTick</li>
+<li>Promise的then与catch</li>
+<li>Async/Await(实际就是promise)</li>
+<li>MutationObserver(html5新特性)<h5 id="代码分析："><a href="#代码分析：" class="headerlink" title="代码分析："></a>代码分析：</h5></li>
+</ul>
+<pre><code>console.log(&#39;script start&#39;)
 
-</code></pre>
+async function async1() {
+    await async2()
+    console.log(&#39;async1 end&#39;)
+}
+async function async2() {
+    console.log(&#39;async2 end&#39;)
+}
+async1()
+
+setTimeout(function() {
+    console.log(&#39;setTimeout&#39;)
+}, 0)
+
+new Promise(resolve =&gt; {
+    console.log(&#39;Promise&#39;)
+    resolve()
+})
+.then(function() {
+    console.log(&#39;promise1&#39;)
+    setTimeout(function() {
+        console.log(&#39;inside-timeout&#39;)
+        new Promise(resolve =&gt; {
+            console.log(&#39;inside-Promise&#39;)
+            resolve()
+        }).then(function(){
+            console.log(&#39;inside-promise1&#39;)
+        })
+}, 0)
+})
+.then(function() {
+    console.log(&#39;promise2&#39;)
+})
+
+console.log(&#39;script end&#39;)</code></pre><p>输出的结果如下：</p>
+<ol>
+<li>script start</li>
+<li>async2 end</li>
+<li>Promise</li>
+<li>script end</li>
+<li>async1 end</li>
+<li>promise1</li>
+<li>promise2</li>
+<li>setTimeout</li>
+<li>inside-timeout</li>
+<li>inside-Promise</li>
+<li>inside-promise1</li>
+</ol>
+<p>执行顺序果分析：</p>
+<ol>
+<li><p>执行整体代码（作为当前宏任务），输出<strong>script start</strong></p>
+</li>
+<li><p>整体代码按顺序执行遇到<strong>async1()</strong>，进入<strong>async1</strong>遇到<strong>await async2()</strong>,<strong>ascyn2()</strong> 即执行函数 <strong>async2</strong>，输出<strong>async2 end</strong>，由于<strong>async2()</strong>没有返回值，所以相当于 <strong>await undefined</strong>,即会将后面的代码放入微任务队列</p>
+<table>
+<thead>
+<tr>
+<th>宏任务</th>
+<th>微任务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无</td>
+<td>console.log(‘async1 end’)</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>遇到<strong>setTimeout()</strong>,将setTimeout的回调压入宏任务队列，目前事件循环宏任务队列与微任务队列如下：</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>宏任务</th>
+<th>微任务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>setTimeout</td>
+<td>console.log(‘async1 end’)</td>
+</tr>
+<tr>
+<td>4.执行<strong>new Promise()</strong>,输出<strong>Promise</strong>，然后由于执行resolve的缘故，所以会将当前promise的then的回调函数压入微任务。</td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>宏任务</th>
+<th>微任务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>setTimeout</td>
+<td>console.log(‘async1 end’)</td>
+</tr>
+<tr>
+<td>无</td>
+<td>Promise.then(第一个then)</td>
+</tr>
+<tr>
+<td>5.当前宏任务执行之最后一行，<strong>console.log(‘script end’)</strong>，输出<strong>script end</strong>当前宏任务结束，开始执行当前宏任务所产生的微任务，目前队列如下所示</td>
+<td></td>
+</tr>
+<tr>
+<td>宏任务</td>
+<td>微任务</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>setTimeout</td>
+<td>console.log(‘async1 end’)</td>
+</tr>
+<tr>
+<td>无</td>
+<td>Promise.then(第一个then)</td>
+</tr>
+<tr>
+<td>6. 执行微任务队列第一个任务<strong>console.log(‘async1 end’)</strong>,输出<strong>async1 end</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>7. 继续执行微任务队列中的<strong>Promise.then()</strong>，代码如下</td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code>.then(function() {
+    console.log(&#39;promise1&#39;)
+    setTimeout(function() {
+        console.log(&#39;inside-timeout&#39;)
+        new Promise(resolve =&gt; {
+            console.log(&#39;inside-Promise&#39;)
+            resolve()
+        }).then(function(){
+            console.log(&#39;inside-promise1&#39;)
+        })
+}, 0)
+})</code></pre><p>首先输出<strong>promise1</strong>，然后将settimeout1放入宏队列<br>宏任务 | 微任务<br>—|—<br>setTimeout | Promise.then(第一个then)<br>setTimeout1 | 无<br>8.<strong>Promise.then</strong>(第一个then)执行完后遇到第二个<strong>Promise.then</strong>，目前在微任务执行中产生新的微任务则继续执行产生的微任务，输出<strong>promise2</strong><br>9.目前微任务队列已清空，则执行宏任务队列中的任务，首先执行<strong>setTimeout</strong>，输出<strong>setTimeout</strong><br>10.继续执行<strong>settimeout1</strong>，settimeout1会产生新的微任务，执行完settimeout1后开始执行所产生的微任务。</p>
+<h2 id="Node中的事件循环"><a href="#Node中的事件循环" class="headerlink" title="Node中的事件循环"></a>Node中的事件循环</h2><p>Node中的事件循环是指Node.js执行非阻塞I/O操作的机制，与浏览器中的事件循环有所不同。<br>下面是Node中具体的事件循环过程</p>
+<pre><code>   ┌───────────────────────────┐
+┌─&gt;│           timers          │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │     pending callbacks     │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │       idle, prepare       │
+│  └─────────────┬─────────────┘      ┌───────────────┐
+│  ┌─────────────┴─────────────┐      │   incoming:   │
+│  │           poll            │&lt;─────┤  connections, │
+│  └─────────────┬─────────────┘      │   data, etc.  │
+│  ┌─────────────┴─────────────┐      └───────────────┘
+│  │           check           │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+└──┤      close callbacks      │
+   └───────────────────────────┘</code></pre><ul>
+<li>incoming阶段：处理已提供的输入脚本（或丢入 REPL，本文不涉及到），它可能会调用一些异步的 API、调度定时器，或者调用 process.nextTick()，然后开始处理事件循环。</li>
+<li>timers 阶段: 这个阶段执行 setTimeout(callback) 和 setInterval(callback) 预定的 callback;</li>
+<li>I/O callbacks 阶段: 此阶段执行某些系统操作的回调，例如TCP错误的类型。 例如，如果TCP套接字在尝试连接时收到 ECONNREFUSED，则某些* nix系统希望等待报告错误。 这将操作将等待在==I/O回调阶段==执行;</li>
+<li>idle, prepare 阶段: 仅node内部使用;</li>
+<li>poll 阶段: 获取新的I/O事件, 例如操作读取文件等等，适当的条件下node将阻塞在这里;</li>
+<li>check 阶段: 执行 setImmediate() 设定的callbacks;</li>
+<li>close callbacks 阶段: 比如 socket.on(‘close’, callback) 的callback会在这个阶段执行;</li>
+</ul>
+<h4 id="Poll阶段（轮询阶段）"><a href="#Poll阶段（轮询阶段）" class="headerlink" title="Poll阶段（轮询阶段）"></a>Poll阶段（轮询阶段）</h4><h5 id="轮询-阶段有两个重要的功能："><a href="#轮询-阶段有两个重要的功能：" class="headerlink" title="轮询 阶段有两个重要的功能："></a>轮询 阶段有两个重要的功能：</h5><ul>
+<li>计算应该阻塞和轮询 I/O 的时间。</li>
+<li>然后，处理 轮询 队列里的事件。<br>当事件循环进入 轮询 阶段且 没有被调度的计时器时 ，将发生以下两种情况之一：</li>
+</ul>
+<p>如果轮询队列 不是空的 ，事件循环将循环访问回调队列并同步执行它们，直到队列已用尽，或者达到了与系统相关的硬性限制。<br>如果轮询队列是空的 ，还有两件事发生：</p>
+<p>如果脚本被 setImmediate() 调度，则事件循环将结束 轮询 阶段，并继续 检查 阶段以执行那些被调度的脚本。</p>
+<p>如果脚本 未被 setImmediate()调度，则事件循环将等待回调被添加到队列中，然后立即执行。</p>
+<p>一旦 轮询 队列为空，事件循环将检查 已达到时间阈值的计时器。如果一个或多个计时器已准备就绪，则事件循环将绕回（timer）计时器阶段以执行这些计时器的回调。</p>
+<h4 id="check阶段（检查阶段）"><a href="#check阶段（检查阶段）" class="headerlink" title="check阶段（检查阶段）"></a>check阶段（检查阶段）</h4><p>此阶段允许人员在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲状态，并且脚本使用 setImmediate() 后被排列在队列中，则事件循环可能继续到 检查 阶段而不是等待。</p>
+<p>setImmediate() 实际上是一个在事件循环的单独阶段运行的特殊计时器。它使用一个 libuv API 来安排回调在 轮询 阶段完成后执行。</p>
+<p>通常，在执行代码时，事件循环最终会命中轮询阶段，在那等待传入连接、请求等。但是，如果回调已使用 setImmediate()调度过，并且轮询阶段变为空闲状态，则它将结束此阶段，并继续到检查阶段而不是继续等待轮询事件。</p>
 
         </div>
     </div>
