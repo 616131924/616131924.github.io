@@ -15,25 +15,17 @@
   </script>
 
   
-  <title>Javascript中的原型与原型链 | Kang&#39;s Blog</title>
+  <title>Category: 知识点 | Kang&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="浅谈JavaScript中的原型与原型链前言1.分享这篇文章的目的原型和原型链其实一直是我的一个知识盲区，一直我都是通过死记硬背的方式来记住他们，但时间过久了，原型和原型链的知识点很快就会变得模糊，因为他们之间的关系是比较复杂的。特别是看到下面这种图的时候。如此复杂的关系是很难靠死记硬背记住的，其实我们只需要知道了解原型和原型链的背景，然后再去理清prototype，__proto__，const">
+  <meta name="description" content="personl blog belongs to Hmk">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Javascript中的原型与原型链">
-<meta property="og:url" content="https://616131924.github.io/base/js-prototype.html">
+<meta property="og:title" content="Kang&#39;s Blog">
+<meta property="og:url" content="https://616131924.github.io/categories/%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
 <meta property="og:site_name" content="Kang&#39;s Blog">
-<meta property="og:description" content="浅谈JavaScript中的原型与原型链前言1.分享这篇文章的目的原型和原型链其实一直是我的一个知识盲区，一直我都是通过死记硬背的方式来记住他们，但时间过久了，原型和原型链的知识点很快就会变得模糊，因为他们之间的关系是比较复杂的。特别是看到下面这种图的时候。如此复杂的关系是很难靠死记硬背记住的，其实我们只需要知道了解原型和原型链的背景，然后再去理清prototype，__proto__，const">
+<meta property="og:description" content="personl blog belongs to Hmk">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20190311194017886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20190311192930650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://7a79-zy-test-1257835692.tcb.qcloud.la/1573549832885_%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_15735493019131.png?sign=ee0b28cf69ad155d88fcd866c8a8a4b5&t=1573550066">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20190311193033876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20190311193745414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
-<meta property="article:published_time" content="2020-03-13T19:47:49.000Z">
-<meta property="article:modified_time" content="2020-03-28T13:20:26.533Z">
 <meta property="article:author" content="Hmk">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190311194017886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70">
   
     <link rel="alternate" href="/atom.xml" title="Kang&#39;s Blog" type="application/atom+xml">
   
@@ -102,148 +94,52 @@
 </header>
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <!--翻页-->
-<style>
-    .header-box {
-        height: 370px;
-        /* filter: blur(10px); */
-        background-size: cover;
-        background-color: lightsteelblue;
+          <style>
+    .container.tag-cate-wrap {
+        min-height: 93vh;
     }
 
-    .post-box {
-        padding: 15px;
-        padding-top: 60px;
-        min-height: 80vh;
-        margin-top: -200px;
-        border-radius: 4px;
-        background-color: rgba(255,255,255,.8);
+    .category-title-inner {
+        padding-top: 50px;
     }
 
-    .post-avatar {
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-    }
-
-    .flow-chart {
-        text-align: center;
-    }
-
-    img[alt="post-cover"] {
-        display: none;
+    strong {
+        text-transform: capitalize;
     }
 </style>
-<header>
-    <div id="header_box" class="header-box"></div>
-</header>
-<section>
-    <div class="container post-box">
-        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
-            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>Javascript中的原型与原型链</strong>
-            </h1>
-            
-            <div class="is-flex align-center">
-                <img class="post-avatar" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1965250681,3772762698&fm=26&gp=0.jpg">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Humingkang</span>
-                <span class="post-date sub-title">-- 2020-03-13</span>
-            </div>
-            
-        </div>
-        <div class="content" style="overflow: auto">
-            <h1 id="浅谈JavaScript中的原型与原型链"><a href="#浅谈JavaScript中的原型与原型链" class="headerlink" title="浅谈JavaScript中的原型与原型链"></a>浅谈JavaScript中的原型与原型链</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><h6 id="1-分享这篇文章的目的"><a href="#1-分享这篇文章的目的" class="headerlink" title="1.分享这篇文章的目的"></a>1.分享这篇文章的目的</h6><p>原型和原型链其实一直是我的一个知识盲区，一直我都是通过死记硬背的方式来记住他们，但时间过久了，原型和原型链的知识点很快就会变得模糊，因为他们之间的关系是比较复杂的。特别是看到下面这种图的时候。<br><img src="https://img-blog.csdnimg.cn/20190311194017886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70" alt="image"><br>如此复杂的关系是很难靠死记硬背记住的，其实我们只需要知道了解原型和原型链的背景，然后再去理清prototype，__proto__，constructor三者各自的含义，自然就能很好的理解JavaScript中原型与原型链到底是个什么东西了</p>
-<h6 id="2-为什么要理解原型与原型链"><a href="#2-为什么要理解原型与原型链" class="headerlink" title="2.为什么要理解原型与原型链"></a>2.为什么要理解原型与原型链</h6><p>JavaScript是一门面向对象的语言，身为前端工程师，天天都用着JavaScript，但却不知道他到底是怎么面向对象的，这种问题一直都是很多前端工程师的痛点，工作中很少用到，并不意味着我们就能不知道，万一哪天产品提需求让你写一个Vue呢？</p>
-<h3 id="JS中的原型与原型链概念"><a href="#JS中的原型与原型链概念" class="headerlink" title="JS中的原型与原型链概念"></a>JS中的原型与原型链概念</h3><h5 id="原型诞生的背景"><a href="#原型诞生的背景" class="headerlink" title="原型诞生的背景"></a>原型诞生的背景</h5><p>要讲清楚原型的概念，我们必须了解其背景。JavaScript是一门面向对象的语言，即使我们平时的工作好像不怎么面向对象，但这是不能否认的事实。而设计JavaScript的<strong><em>Brendan Eich</em></strong>大神，认为JavaScript只是一个脚本语言并不需要太过庞大的面向对象体系，所以在综合的考虑下，他选择了基于原型的面向对象设计，从一开始原型的概念就已经加入到了JavaScript中。</p>
-<h5 id="原型与原型链"><a href="#原型与原型链" class="headerlink" title="原型与原型链"></a>原型与原型链</h5><h6 id="1-原型"><a href="#1-原型" class="headerlink" title="1.原型"></a>1.原型</h6><p>JavaScript中原型概念与设计模式中的原型模式是一致的，所有的对象都是从另一个对象克隆得来，在创建对象前需要先获取到被创建对象的原型对象，然后进行拷贝形成一个新的对象，而被创建对象中会保存一个指针，该指针指向其原型对象。</p>
-<h6 id="1-原型链"><a href="#1-原型链" class="headerlink" title="1.原型链"></a>1.原型链</h6><p>在描述原型这个概念的时候，已经说到在对象被创建后会在对象内保存一个原型对象的指针，当生成一个对象B，对象B的原型对象是A，生成一个对象C，对象C的原型对象是对象B,于是就会形成A&lt;-B&lt;-C的单向链结构,而这条链就是原型链，也正是形成了这样的单向链结构，巧妙的利用原型模式在JavaScript中完成了’继承’的实现</p>
-<h3 id="JS中的原型与原型链体现"><a href="#JS中的原型与原型链体现" class="headerlink" title="JS中的原型与原型链体现"></a>JS中的原型与原型链体现</h3><h6 id="1-proto"><a href="#1-proto" class="headerlink" title="1.proto"></a>1.<strong>proto</strong></h6><p><img src="https://img-blog.csdnimg.cn/20190311192930650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70" alt="image"><br><strong>proto</strong>是每个对象都会具备的属性，该属性是一个引用指向当前对象的原型对象，即指向原型prototype，至于为什么prototype前面会有Object.,Foo.,后面的内容会讲到。而<strong>proto</strong>的指向其实就是原型链的指向，当访问图中f1变量中不存在的属性时会沿着<strong>proto</strong>指向访问下一个原型对象，如果直到最后都没有找到匹配的属性，那么就会变成null.xxxx，这个时候就会报错。</p>
-<p>在JavaScript的发展历史中，<strong>proto</strong>在一开始并不是ECMAScript规范的内容，而是部分浏览器私自挂载在对象上的一个属性，该属性指向了当前对象的原型对象。而到了ECMAScript2015规范中，<strong>proto</strong>才被纳入规范。</p>
-<p><img src="https://7a79-zy-test-1257835692.tcb.qcloud.la/1573549832885_%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_15735493019131.png?sign=ee0b28cf69ad155d88fcd866c8a8a4b5&t=1573550066" alt="image"></p>
-<p>从截图中看出，其实对象中的<strong>proto</strong>属性是被get/set封装过，其实get/set的封装就相当于分别调用Object.getPrototyoeOf(this)/Object.setPrototyoeOf(this,vale) 两个方法来获取当前对象的原型对象</p>
-<h6 id="2-prototype"><a href="#2-prototype" class="headerlink" title="2.prototype"></a>2.prototype</h6><p><img src="https://img-blog.csdnimg.cn/20190311193033876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70" alt="!image"></p>
-<p> 1.1 prototype的真正含义</p>
-<p>prototype的翻译就是原型的意思，从ES2019规范里prototype被描述为一个给其他对象提供共享属性的对象，这句话表明了prototype本身是一个对象，这个对象的职能是为其他对象提供克隆的模板。在JavaScript中，prototype是作为一个独立的对象存在。</p>
-<p> 1.2 函数中的prototype属性</p>
-<p>在JavaScript中，函数是一个很特别的存在，函数也是对象它具有自己的原型（即<strong>proto</strong>），但函数也能作为某个对象的构造函数而存在。作为构造函数，该函数的作用就是按照指定的原型对象创建一个具体的对象，而指定的原型对象则会保存在函数的prototype属性中，而被创建出来的具体对象中的<strong>proto</strong>会指向该函数的prototype。</p>
-<h6 id="3-contructor"><a href="#3-contructor" class="headerlink" title="3.contructor"></a>3.contructor</h6><p><img src="https://img-blog.csdnimg.cn/20190311193745414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NjMTg4Njg4NzY4Mzc=,size_16,color_FFFFFF,t_70" alt="!image"><br>由图中可以看出constructor属性指向当前对象的构造函数，实例对象中是不存在constructor属性的（手动添加constructor属性除外），但能通过原型链的访问到原型对象上的constructor属性，也就是说constructor属性是存在于prototype中的。</p>
-<h3 id="原型与原型链的应用"><a href="#原型与原型链的应用" class="headerlink" title="原型与原型链的应用"></a>原型与原型链的应用</h3><h5 id="浅析Vue源码内原型与原型链的使用"><a href="#浅析Vue源码内原型与原型链的使用" class="headerlink" title="浅析Vue源码内原型与原型链的使用"></a>浅析Vue源码内原型与原型链的使用</h5><h6 id="1-从Vue-extend了解Vue实例与VueComponent实例间的继承"><a href="#1-从Vue-extend了解Vue实例与VueComponent实例间的继承" class="headerlink" title="1.从Vue.extend了解Vue实例与VueComponent实例间的继承"></a>1.从Vue.extend了解Vue实例与VueComponent实例间的继承</h6><p>首先，我们经常在代码中操作组件中的this，我们先将this输出来看看。</p>
-<pre><code class="javascript">VueComponet{
-    $attrs: (...)
-    ...
-    __proto__: Vue
-}
-</code></pre>
-<p>如上代码所示，其实每一个组件都是由一个Vue原型对象创建而来，在Vue的说明文档中，Vue.extend的解析为‘使用基础 Vue 构造器，创建一个“子类”’，转成代码的意思是Vue.extend生成一个组件构造函数，如下代码所示。</p>
-<pre><code class="javascript"> Vue.extend = function (extendOptions: Object): Function {
-    ...
-1    const Super = this
-    ...
-2    const Sub = function VueComponent (options) {
-      this._init(options)
-    }
-3   Sub.prototype = Object.create(Super.prototype)
-    ...
-4   return Sub
-  }
-}</code></pre>
-<p>实现Vue与VueComponet之间的继承分为以下三步：</p>
-<p>1.利用Super变量保存当前的调用extend方法的Vue实例对象</p>
-<p>2.进行VueComponet构造函数的编写</p>
-<p>3.指定构造函数中的prototype属性，即告诉构造函数需要根据指定的prototype进行对象的创建，而prototype指向的是利用Object.create(Vue当前实例对象)创建出来的对象，此时就VueComponent实例对象就能够访问到Vue实例对象上的属性，也就形成了所说的原型链，其中继承已经在这一步完成了。</p>
-<p>4.最后一步则将VueComponet的构造函数返回，也就完成了Vue文档中‘创建一个“子类”’的说法</p>
-<h6 id="2-this-emit方法挂载"><a href="#2-this-emit方法挂载" class="headerlink" title="2.this.$emit方法挂载"></a>2.this.$emit方法挂载</h6><pre><code class="javascript"> Vue.prototype.$emit = function (event: string): Component {
-    const vm: Component = this
-   ...
-    return vm
-  }</code></pre>
-<p>this.$emit()方法其实并不是VueComponet实例对象上的方法，而是VueComponet继承了Vue对象，继而形成了原型链，当访问到VueComponet.$emit()时会访问Vue.$emit(),而源码中$emit()是通过以上方法挂载到Vue对象上的。</p>
-<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><h6 id="编写一个实现继承的函数"><a href="#编写一个实现继承的函数" class="headerlink" title="编写一个实现继承的函数"></a>编写一个实现继承的函数</h6><p>该函数传入一个构造函数a与一个构造函数b和b类中需要的属性，返回一个b类继承a类后新的的构造函数</p>
-<pre><code class="javascript"> const inherit =(fatherConstructor,sonConstructor,properties) =&gt;{
-   1  let subConstructor = function(...properties){
-         fatherConstructor.call(this,...properties)
-         sonConstructor.call(this,...properties)
-        }
-   2  subConstructor.prototype ={
-         ...properties,
-         constructor:subConstructor
-        }
-   3  Object.setPrototypeOf(
-        subConstructor.prototype,
-        fatherConstructor.prototype
-     )
-     return subConstructor
- }</code></pre>
-<p>步骤分析：</p>
-<p>1.创建一个新的构造函数（称为c构造函数），该函数内部调用了父类与子类的构造函数，确保构造函数中初始化的时候与父类和子类一致。</p>
-<p>2.新建一个新构造函数的原型对象，里面要保有所有b类的属性和指向c构造函数的constructor属性</p>
-<p>3.将c构造函数的原型对象即subConstructor.prototype的指向对象的<strong>proto</strong>指向父级的原型对象即fatherConstructor.prototype</p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>1.JavaScript的面向对象是基于原型模式来设计的</p>
-<p>2.JavaScript的继承是通过原型链来实现的</p>
-<p>3.JavaScript中函数能作为构造函数并用new function()来构建对象。</p>
 
-        </div>
+
+<div class="container tag-cate-wrap">
+    <div class="category-title-inner content has-text-centered">
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·知识点</strong></h1>
     </div>
-</section>
-<script>
-    // 获取第一张图, 用以当封面背景图
-    var img = document.querySelectorAll('img')[1]
 
-    if (img) {
-        var header_box = document.querySelector('#header_box')
-        header_box.style.backgroundImage = 'url('+ img.src +')'
-    }
-</script>
+    
+    
+        <div class="box">
+            <article class="media">
+                
+                <a href="/2020/03/28/零散知识点（持续更新）/">
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>前端零散知识点（持续更新）</strong> <small class="post-date">at: 2020-03-28</small>
+                                <br>
+                                零碎知识点记录JavaScript
+1. new Foo()执行时发了什么
 
-<!-- for code block highlight --> 
-<!-- theme.block_highlight -->
-<!-- we do not guarantee the char sequences spell right, usr himself do it -->
-
-<link rel="stylesheet" href="/css/highlight_rainbow.css">
-
-<script src="/js/highlight.min.js"></script>
-<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
-
+HtmlCSS计算机网络数据结构与算法JavaScript1 new Foo()执行时发了什么1.一个继承自 Foo.prototype 的新对象被创建。
+2.使用指定的参数调用构造函数 Foo，并将 this 绑定到新创建的对象。new Foo 等同于 new Foo()，也..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+</div>
       </div>
   </div>
 </body>
