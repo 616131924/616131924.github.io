@@ -4,18 +4,12 @@
   
     
     <entry>
-      <title>前端零散知识点（持续更新）</title>
+      <title>零散知识点（持续更新）</title>
       <link href="/2020/03/28/%E9%9B%B6%E6%95%A3%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/"/>
       <url>/2020/03/28/%E9%9B%B6%E6%95%A3%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/</url>
       
-        <content type="html"><![CDATA[<h1 id="零碎知识点记录"><a href="#零碎知识点记录" class="headerlink" title="零碎知识点记录"></a>零碎知识点记录</h1><h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul><li><a href="#1-new-Foo()执行时发了什么">1. new Foo()执行时发了什么</a></li></ul><h2 id="Html"><a href="#Html" class="headerlink" title="Html"></a>Html</h2><h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><h3 id="JavaScript-1"><a href="#JavaScript-1" class="headerlink" title="JavaScript"></a>JavaScript</h3><h4 id="1-new-Foo-执行时发了什么"><a href="#1-new-Foo-执行时发了什么" class="headerlink" title="1 new Foo()执行时发了什么"></a>1 new Foo()执行时发了什么</h4><pre><code>1.一个继承自 Foo.prototype 的新对象被创建。2.使用指定的参数调用构造函数 Foo，并将 this 绑定到新创建的对象。new Foo 等同于 new Foo()，也就是没有指定参数列表，Foo 不带任何参数调用的情况。3.由构造函数返回的对象就是 new 表达式的结果。如果构造函数没有显式返回一个对象，则使用步骤1创建的对象。（一般情况下，构造函数不返回值，但是用户可以选择主动返回对象，来覆盖正常的对象创建步骤）</code></pre>]]></content>
+        <content type="html"><![CDATA[<h1 id="零碎知识点记录"><a href="#零碎知识点记录" class="headerlink" title="零碎知识点记录"></a>零碎知识点记录</h1><h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul><li><a href="#1-new-Foo()执行时发了什么">1. new Foo()执行时发了什么</a></li><li><a href="#2-手动实现一个new">2. 手动实现一个new</a></li></ul><h2 id="Html"><a href="#Html" class="headerlink" title="Html"></a>Html</h2><h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><h3 id="JavaScript-1"><a href="#JavaScript-1" class="headerlink" title="JavaScript"></a>JavaScript</h3><h4 id="1-new-Foo-执行时发了什么"><a href="#1-new-Foo-执行时发了什么" class="headerlink" title="1 new Foo()执行时发了什么"></a>1 new Foo()执行时发了什么</h4><pre><code>1.一个继承自 Foo.prototype 的新对象被创建。2.使用指定的参数调用构造函数 Foo，并将 this 绑定到新创建的对象。new Foo 等同于 new Foo()，也就是没有指定参数列表，Foo 不带任何参数调用的情况。3.由构造函数返回的对象就是 new 表达式的结果。如果构造函数没有显式返回一个对象，则使用步骤1创建的对象。（一般情况下，构造函数不返回值，但是用户可以选择主动返回对象，来覆盖正常的对象创建步骤）</code></pre><h4 id="2-手动实现一个new"><a href="#2-手动实现一个new" class="headerlink" title="2 手动实现一个new"></a>2 手动实现一个new</h4><pre><code>function myNew(myConsrtuctor,...args){    var newObject = {}    // 设置原型对象    newObject.__proto__ = myConsrtuctor.prototype    // 调用构造函数    var constructorObject = myConsrtuctor.apply(newObject,args)    // 如果构造函数有返回值则调用构造函数的返回值    return constructorObject? constructorObject :newObject}</code></pre>]]></content>
       
-      
-      <categories>
-          
-          <category> 知识点 </category>
-          
-      </categories>
       
       
     </entry>
